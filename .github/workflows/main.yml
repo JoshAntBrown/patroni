@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}:pg-${{ inputs.pg_major }}
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
