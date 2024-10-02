@@ -2,13 +2,17 @@ ARG PG_MAJOR=16
 
 FROM postgres:$PG_MAJOR
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG PGHOME=/home/postgres
+ENV PGDATA=$PGHOME/data
 
-RUN apt-get update && \
-    apt-get install -y patroni && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN set -ex \
+    && apt-get update -y \
+    && apt-get install -y patroni \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p "$PGDATA" \
+    && chown -R postgres:postgres "$PGHOME"
 
+WORKDIR $PGHOME
 USER postgres
-WORKDIR /
+
 CMD ["patroni", "/etc/patroni.yml"]
